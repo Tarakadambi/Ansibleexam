@@ -1,0 +1,41 @@
+- name: Install Apache2 and PHP
+  become: true
+  apt:
+    name:
+      - apache2
+      - php
+      - php-mysql
+      - libapache2-mod-php
+      - unzip
+      - curl
+    state: present
+    update_cache: yes
+
+- name: Start Apache2 service
+  become: true
+  service:
+    name: apache2
+    state: started
+    enabled: true
+
+- name: Download Magento (simplified example using wget)
+  become: true
+  get_url:
+    url: https://github.com/magento/magento2/archive/refs/heads/2.4-develop.zip
+    dest: /tmp/magento.zip
+
+- name: Unarchive Magento
+  become: true
+  unarchive:
+    src: /tmp/magento.zip
+    dest: /var/www/html/
+    remote_src: yes
+
+- name: Set ownership of web directory
+  become: true
+  file:
+    path: /var/www/html/magento2-2.4-develop
+    state: directory
+    owner: www-data
+    group: www-data
+    recurse: yes

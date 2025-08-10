@@ -1,0 +1,31 @@
+- name: Install MySQL Server
+  become: true
+  apt:
+    name: mysql-server
+    state: present
+    update_cache: yes
+
+- name: Start MySQL service
+  service:
+    name: mysql
+    state: started
+    enabled: true
+
+- name: Create Magento database
+  mysql_db:
+    name: magento
+    state: present
+    login_user: root
+    login_password: NewStrongPassword123!
+    login_host: localhost
+
+- name: Create Magento DB user
+  mysql_user:
+    name: magento_user
+    password: magento_pass
+    priv: 'magento.*:ALL'
+    host: '%'
+    state: present
+    login_user: root
+    login_password: NewStrongPassword123!
+    login_host: localhost

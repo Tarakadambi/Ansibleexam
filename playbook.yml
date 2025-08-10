@@ -1,0 +1,7 @@
+- name: Deploy Magento and MySQL
+  hosts: magento
+  become: true
+
+  roles:
+    - mysql
+    - magento
